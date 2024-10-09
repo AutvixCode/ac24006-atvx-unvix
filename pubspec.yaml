@@ -1,0 +1,37 @@
+name: unity_importer
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.5.3 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  http: ^1.2.2
+  file_picker: ^8.1.2
+  flutter_svg: ^2.0.10+1
+  path_provider: ^2.0.11
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^4.0.0
+
+flutter:
+  assets:
+    - images/logo.svg
+    - images/univix.svg
+    - images/arrow_left.svg
+    - images/arrow_right.svg
+    - images/file_imported.svg
+    - images/info.svg
+    - images/send_file.svg
+    - images/unity_file.svg
+
+  uses-material-design: true
