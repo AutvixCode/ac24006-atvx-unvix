@@ -1,9 +1,11 @@
+// ignore_for_file: type=lint
+
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:io';
-import 'dialog.dart'; // Assumindo que este arquivo contém o SlideIndex dialog.
-import 'package:unity_importer/icons.dart'; // Supondo que este arquivo contém o ícone "iconInfo".
+import 'widgets/dialog.dart';
+import 'package:unity_importer/controllers/global_variables.dart';
 
 void main() {
   runApp(MyApp());
@@ -27,7 +29,6 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
   File? selectedFile;
   late int index = 0;
 
-  // Função para abrir o diálogo
   void _dialog() {
     showDialog(
       context: context,
@@ -44,16 +45,14 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
     if (result != null && result.files.single.path != null) {
       setState(() {
         selectedFile = File(result.files.single.path!);
-        print("Arquivo selecionado: ${selectedFile!.path}");  // Adicione isso para depuração
+        print("Arquivo selecionado: ${selectedFile!.path}");
       });
     } else {
-      // Caso o usuário não selecione nenhum arquivo
       print("Nenhum arquivo selecionado");
     }
   }
 
 
-  // Função de envio (simulada aqui)
   void _uploadFile() {
     if (selectedFile != null) {
       ScaffoldMessenger.of(context).showSnackBar(
