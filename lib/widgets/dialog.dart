@@ -18,7 +18,6 @@ class _SlideIndexState extends State<SlideIndex> {
   @override
   void initState() {
     super.initState();
-    // Iniciar o controlador de página na página inicial passada
     _pageController = PageController(initialPage: widget.index);
     currentIndex = widget.index;
   }
@@ -79,22 +78,24 @@ class SlideItem extends StatelessWidget {
       ),
       content: Container(
         width: MediaQuery.of(context).size.width * 0.4,
-        height: MediaQuery.of(context).size.height * 0.2,
+        height: MediaQuery.of(context).size.height * 0.15,
         child: Column(
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                GestureDetector(
-                  onTap: onPrevious,
-                  child: SvgPicture.asset(
-                    arrowLf,
-                    color: Colors.black,
-                  ),
-                ),
+                index > 0
+                    ? GestureDetector(
+                        onTap: onPrevious,
+                        child: SvgPicture.asset(
+                          arrowLf,
+                          color: Colors.black,
+                        ),
+                      )
+                    : SizedBox(width: 60),
                 Padding(
-                  padding: EdgeInsets.only(top: 15),
+                  padding: EdgeInsets.only(top: 15, left: 20),
                   child: SvgPicture.asset(
                     slideList[index].imageUrl,
                     width: 60,
@@ -102,21 +103,26 @@ class SlideItem extends StatelessWidget {
                     color: Colors.black,
                   ),
                 ),
-                Expanded(
-                  child: Text(
-                    slideList[index].description,
-                    textAlign: TextAlign.center,
-                    softWrap: true,  // Permite quebra de linha
-                    overflow: TextOverflow.visible, // Garante que o texto sempre será mostrado
-                  ),
-                ),
-                GestureDetector(
-                  onTap: onNext,
-                  child: SvgPicture.asset(
-                    arrowRg,
-                    color: Colors.black,
-                  ),
-                ),
+                Container(
+                    width: MediaQuery.of(context).size.width * 0.25,
+                    child: Expanded(
+                      child: Text(
+                        slideList[index].description,
+                        style: TextStyle(fontSize: 18),
+                        textAlign: TextAlign.center,
+                        softWrap: true,
+                        overflow: TextOverflow.visible,
+                      ),
+                    )),
+                index < slideList.length - 1
+                    ? GestureDetector(
+                        onTap: onNext,
+                        child: SvgPicture.asset(
+                          arrowRg,
+                          color: Colors.black,
+                        ),
+                      )
+                    : SizedBox(width: 60),
               ],
             )
           ],
@@ -128,7 +134,6 @@ class SlideItem extends StatelessWidget {
     );
   }
 }
-
 
 class Slide {
   final String title;
@@ -148,7 +153,7 @@ final slideList = [
   ),
   Slide(
     title: "Primeiro Passo",
-    imageUrl: importFile,
+    imageUrl: fileImp,
     description:
         'Clique em “Selecionar arquivo” e Importe o arquivo .fbx do seu projeto.',
   ),
@@ -164,9 +169,9 @@ final slideList = [
       description:
           "Encaminhe o arquivo para o app, selecionado “Enviar arquivo”."),
   Slide(
-    title: "Pronto o sorvetin",
-    imageUrl: iconLogo,
+    title: "Confirmação de Envio",
+    imageUrl: importFile,
     description:
-        'Se desejar encerrar a sessão deste aplicativo com a sua plataforma, clique no ícone para efetuar o desvinculo do aparelho.',
+        'Quando Enviado, aparecerá uma confirmação na tela.',
   ),
 ];
