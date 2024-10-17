@@ -4,13 +4,12 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'controllers/server.dart';
 import 'widgets/dialog.dart';
 import 'package:unity_importer/controllers/global_variables.dart';
 import 'package:http/http.dart' as http;
 
+
 void main() {
-  startServer(); // Inicie o servidor
   runApp(MyApp());
 }
 
@@ -29,8 +28,8 @@ class FileUploadScreen extends StatefulWidget {
 }
 
 class _FileUploadScreenState extends State<FileUploadScreen> {
-  Uint8List? selectedFileBytes; // Armazena os bytes do arquivo
-  String? selectedFileName; // Armazena o nome do arquivo
+  Uint8List? selectedFileBytes;
+  String? selectedFileName;
 
   void _dialog() {
     showDialog(
@@ -42,27 +41,19 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
   void _uploadFile() async {
     if (selectedFileBytes != null) {
       var request = http.MultipartRequest(
-          'POST', Uri.parse('http://localhost:8080/upload'));
+          'POST', Uri.parse('http://172.27.90.203:8080/upload'));
 
-      request.files.add(
-          http.MultipartFile.fromBytes('fbxFile', selectedFileBytes!, filename: selectedFileName));
+      request.files.add(http.MultipartFile.fromBytes(
+          'fbxFile', selectedFileBytes!,
+          filename: selectedFileName));
 
-      try {
-        var response = await request.send();
-        if (response.statusCode == 200) {
-          ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Arquivo enviado com sucesso!')));
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Falha ao enviar o arquivo: ${response.reasonPhrase}')));
-        }
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Erro ao enviar o arquivo: $e')));
-      }
-    } else {
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Nenhum arquivo selecionado.')));
+            SnackBar(content: Text('Arquivo enviado com sucesso! ${selectedFileName}')));
+
+    await request.send();
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Nenhum arquivo selecionado.')));
     }
   }
 
@@ -74,8 +65,10 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
 
     if (result != null && result.files.single.bytes != null) {
       setState(() {
-        selectedFileBytes = result.files.single.bytes; // Armazena os bytes do arquivo
-        selectedFileName = result.files.single.name; // Armazena o nome do arquivo
+        selectedFileBytes =
+            result.files.single.bytes;
+        selectedFileName =
+            result.files.single.name;
         print("Arquivo selecionado: $selectedFileName");
       });
     } else {
@@ -188,9 +181,9 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
                         ),
                         child: const Center(
                             child: Text(
-                              'Enviar Arquivo',
-                              style: TextStyle(color: Colors.black),
-                            )),
+                          'Enviar Arquivo',
+                          style: TextStyle(color: Colors.black),
+                        )),
                       ),
                     ),
                   ],
