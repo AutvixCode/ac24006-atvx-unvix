@@ -1,4 +1,4 @@
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, deprecated_member_use
 
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -7,7 +7,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'widgets/dialog.dart';
 import 'package:unity_importer/controllers/global_variables.dart';
 import 'package:http/http.dart' as http;
-
 
 void main() {
   runApp(MyApp());
@@ -22,6 +21,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+// Main screen for file upload
 class FileUploadScreen extends StatefulWidget {
   @override
   _FileUploadScreenState createState() => _FileUploadScreenState();
@@ -31,6 +31,7 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
   Uint8List? selectedFileBytes;
   String? selectedFileName;
 
+  // Function to show a dialog
   void _dialog() {
     showDialog(
       context: context,
@@ -38,6 +39,7 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
     );
   }
 
+  // Function to upload the selected file
   void _uploadFile() async {
     if (selectedFileBytes != null) {
       var request = http.MultipartRequest(
@@ -47,16 +49,17 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
           'fbxFile', selectedFileBytes!,
           filename: selectedFileName));
 
-      ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Arquivo enviado com sucesso! ${selectedFileName}')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('File successfully uploaded! ${selectedFileName}')));
 
-    await request.send();
+      await request.send();
     } else {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Nenhum arquivo selecionado.')));
+          .showSnackBar(SnackBar(content: Text('No file selected.')));
     }
   }
 
+  // Function to pick a file from the device
   Future<void> _pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -65,14 +68,12 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
 
     if (result != null && result.files.single.bytes != null) {
       setState(() {
-        selectedFileBytes =
-            result.files.single.bytes;
-        selectedFileName =
-            result.files.single.name;
-        print("Arquivo selecionado: $selectedFileName");
+        selectedFileBytes = result.files.single.bytes;
+        selectedFileName = result.files.single.name;
+        print("Selected file: $selectedFileName");
       });
     } else {
-      print("Nenhum arquivo selecionado");
+      print("No file selected");
     }
   }
 
@@ -152,15 +153,15 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
                           ],
                         ),
                         child: const Center(
-                          child: Text('Selecione um Arquivo',
+                          child: Text('Select a File',
                               style: TextStyle(color: Colors.black)),
                         ),
                       ),
                     ),
                     const SizedBox(height: 20),
                     Text(selectedFileBytes != null
-                        ? 'Arquivo selecionado: $selectedFileName'
-                        : 'Nenhum arquivo selecionado'),
+                        ? 'Selected file: $selectedFileName'
+                        : 'No file selected'),
                     const SizedBox(height: 20),
                     GestureDetector(
                       onTap: _uploadFile,
@@ -181,7 +182,7 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
                         ),
                         child: const Center(
                             child: Text(
-                          'Enviar Arquivo',
+                          'Upload File',
                           style: TextStyle(color: Colors.black),
                         )),
                       ),
